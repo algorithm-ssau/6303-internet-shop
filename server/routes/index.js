@@ -1,13 +1,32 @@
-const Router = require("express");
-const router = new Router()
-const productRouter = require('./productRouter')
-const brandRouter = require('./brandRouter')
-const userRouter = require('./userRouter')
-const typeRouter = require('./typeRouter')
+require('dotenv').config();
+const express = require('express');
+const sequelize = require('./db');
+const models = require('./models/models');
+const PORT = process.env.PORT || 5000;
+const cors = require('cors');
+const router = require('./routes/index')
+const errorHandler = require('./middleware/ErrorHandlingMiddleware')
 
-router.use('/user', userRouter)
-router.use('/type', typeRouter)
-router.use('/brand', brandRouter)
-router.use('/product', productRouter)
+const app = express();
+app.use(cors())
+app.use(express.json())
+app.use('/api', router)
 
-module.exports = router
+// Обработка ошибок, последний Middleware
+app.use(errorHandler)
+
+app.get('/', (req, res) => {
+    res.status(200).json({ message: 'WORKING' });
+})
+
+const start = async () => {
+    try {
+        await sequelize.authenticate()
+        await sequelize.sync()
+        app.listen(PORT, () => console.log(`Server started on port ${PORT} `));
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+start();
