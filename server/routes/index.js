@@ -1,13 +1,21 @@
-const Router = require("express");
-const router = new Router()
-const deviceRouter = require('./deviceRouter')
-const brandRouter = require('./brandRouter')
-const userRouter = require('./userRouter')
-const typeRouter = require('./typeRouter')
+import express from 'express'
 
-router.use('/user', userRouter)
-router.use('/type', typeRouter)
-router.use('/brand', brandRouter)
-router.use('/device', deviceRouter)
+import product from './product.js'
+import category from './category.js'
+import brand from './brand.js'
+import user from './user.js'
+import basket from './basket.js'
+import rating from './rating.js'
+import order from './order.js'
 
-module.exports = router
+const router = new express.Router()
+
+router.use('/product', product)
+router.use('/category', category)
+router.use('/brand', brand)
+router.use('/user', user)
+router.use('/basket', basket)
+router.use('/rating', rating)
+router.use('/order', order)
+
+export default router
