@@ -1,32 +1,21 @@
-require('dotenv').config();
-const express = require('express');
-const sequelize = require('./db');
-const models = require('./models/models');
-const PORT = process.env.PORT || 5000;
-const cors = require('cors');
-const router = require('./routes/index')
-const errorHandler = require('./middleware/ErrorHandlingMiddleware')
+import express from 'express'
 
-const app = express();
-app.use(cors())
-app.use(express.json())
-app.use('/api', router)
+import product from './product.js'
+import category from './category.js'
+import brand from './brand.js'
+import user from './user.js'
+import basket from './basket.js'
+import rating from './rating.js'
+import order from './order.js'
 
-// Обработка ошибок, последний Middleware
-app.use(errorHandler)
+const router = new express.Router()
 
-app.get('/', (req, res) => {
-    res.status(200).json({ message: 'WORKING' });
-})
+router.use('/product', product)
+router.use('/category', category)
+router.use('/brand', brand)
+router.use('/user', user)
+router.use('/basket', basket)
+router.use('/rating', rating)
+router.use('/order', order)
 
-const start = async () => {
-    try {
-        await sequelize.authenticate()
-        await sequelize.sync()
-        app.listen(PORT, () => console.log(`Server started on port ${PORT} `));
-    } catch (e) {
-        console.log(e);
-    }
-}
-
-start();
+export default router
